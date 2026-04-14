@@ -458,7 +458,7 @@ def experiment_c4(mesh_spec: dict, n_gaps=8):
             q_emb = embed(question)
             blended, activated = collective.collective_resonate(q_emb, hops=2, top_k=6)
 
-            meshes_seen = list({m for _, _, m in activated if _ > CONFIDENCE_FLOOR})
+            meshes_seen = list({m for sim, _t, m in activated if sim > CONFIDENCE_FLOOR})
             is_cross_domain = len(meshes_seen) > 1
 
             context = "\n".join(
