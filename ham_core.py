@@ -188,6 +188,62 @@ class HolographicMesh:
         return [(scores[i].item(), idx[i].item(),
                  self.memories[idx[i]][1]) for i in range(k)]
 
+    def novelty_score(self, output_vec) -> float:
+        """
+        Measure how far an output vector is from all stored memories.
+
+        novelty = 1 - max_cosine_similarity(output, all_stored)
+
+        0.0 = output perfectly matches a known memory (fully understood)
+        1.0 = output is orthogonal to all stored memories (completely novel)
+
+        Use this after diffraction to detect when the mesh is pointing
+        at an unexplored region between known concepts — a conjecture.
+        """
+        if not self.memories:
+            return 1.0
+        stored = torch.stack([e for e, _ in self.memories]).to(self.device)
+        sims = F.cosine_similarity(output_vec.unsqueeze(0), stored)
+        return 1.0 - sims.max().item()
+
+    def find_novel_regions(self, n_probes=50, threshold=0.35, hops=2):
+        """
+        Probe the mesh systematically to find high-novelty output regions.
+
+        Each stored memory is used as a seed; the mesh diffracts it and
+        measures how novel the output is. High novelty = the mesh is pointing
+        somewhere between known concepts — a potential conjecture zone.
+
+        Returns list of (novelty_score, seed_text, nearest_neighbors)
+        sorted by novelty descending.
+        """
+        if not self.memories:
+            return []
+
+        results = []
+        n_probes = min(n_probes, len(self.memories))
+        probe_indices = list(range(len(self.memories)))
+
+        stored = torch.stack([e for e, _ in self.memories]).to(self.device)
+
+        for idx in probe_indices[:n_probes]:
+            seed_vec, seed_text = self.memories[idx]
+            output = self.diffract(seed_vec, hops=hops)
+            score = self.novelty_score(output)
+
+            if score >= threshold:
+                # Find nearest known memories to this novel output
+                sims = F.cosine_similarity(output.unsqueeze(0), stored)
+                top_vals, top_idx = torch.topk(sims, min(3, len(self.memories)))
+                neighbors = [
+                    (top_vals[i].item(), self.memories[top_idx[i].item()][1])
+                    for i in range(len(top_vals))
+                ]
+                results.append((score, seed_text, neighbors))
+
+        results.sort(key=lambda x: -x[0])
+        return results
+
     def dominant_memories(self, n=10):
         """
         Find memories most aligned with the mesh's dominant direction.
