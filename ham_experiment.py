@@ -541,7 +541,7 @@ def experiment_c5_phase(mesh_spec: dict, n_queries=10):
         "How does language shape thought?",
     ][:n_queries]
 
-    DREAM_STAGES = [0, 100, 500, 1000]
+    DREAM_STAGES = [0, 100, 200, 300, 400, 500, 700, 1000]
 
     results = {
         "claim": "C5-PHASE",
