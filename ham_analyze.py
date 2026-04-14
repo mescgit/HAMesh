@@ -264,12 +264,85 @@ def report_session(path: Path):
 # Main
 # ---------------------------------------------------------------------------
 
+def aggregate_c5_phase():
+    """
+    Reads ALL C5_PHASE result files and computes mean ± std dev
+    across runs for each dream stage. This is what goes in the paper.
+    """
+    files = sorted(LOGS_DIR.glob("experiment_C5_PHASE_*.json"),
+                   key=lambda p: p.stat().st_mtime)
+    if not files:
+        print("  No C5_PHASE results found.")
+        return
+
+    # Collect per-stage diversity values across runs
+    from collections import defaultdict
+    import statistics
+
+    stage_data = defaultdict(list)   # stage -> [diversity_fraction, ...]
+    stage_energy = defaultdict(list) # stage -> [energy, ...]
+
+    for f in files:
+        try:
+            data = load_json(f)
+            for stage_str, s in data.get("stages", {}).items():
+                stage = int(stage_str)
+                stage_data[stage].append(s["different_fraction"])
+                stage_energy[stage].append(s["mesh_energy"])
+        except Exception:
+            pass
+
+    if not stage_data:
+        print("  Could not parse C5_PHASE files.")
+        return
+
+    n_runs = max(len(v) for v in stage_data.values())
+    print(f"\n  C5-PHASE Aggregate ({n_runs} runs across {len(files)} files)")
+    print(f"\n  {'Cycles':>8}  {'Mean Div':>10}  {'Std Dev':>8}  "
+          f"{'Min':>6}  {'Max':>6}  {'State'}")
+    print(f"  {'-'*8}  {'-'*10}  {'-'*8}  {'-'*6}  {'-'*6}  {'-'*20}")
+
+    for stage in sorted(stage_data.keys()):
+        vals = stage_data[stage]
+        mean = sum(vals) / len(vals)
+        std  = statistics.stdev(vals) if len(vals) > 1 else 0.0
+        mn   = min(vals)
+        mx   = max(vals)
+        n    = len(vals)
+
+        if std < 0.05 and mean > 0.9:
+            state = "✓ deterministic distributed"
+        elif std < 0.05 and mean < 0.1:
+            state = "✗ deterministic collapsed"
+        elif mean > 0.6:
+            state = "~ stochastic (mostly distributed)"
+        elif mean > 0.3:
+            state = "~ stochastic (bistable)"
+        else:
+            state = "~ stochastic (mostly collapsed)"
+
+        print(f"  {stage:>8}  {mean:>10.1%}  {std:>8.1%}  "
+              f"{mn:>6.0%}  {mx:>6.0%}  {state}  (n={n})")
+
+    print(f"\n  Key findings:")
+    for stage in sorted(stage_data.keys()):
+        vals = stage_data[stage]
+        mean = sum(vals) / len(vals)
+        std  = statistics.stdev(vals) if len(vals) > 1 else 0.0
+        if std < 0.05 and mean > 0.9:
+            print(f"    {stage} cycles → always 100% (deterministic distributed) ← USE THIS")
+        elif std < 0.05 and mean < 0.1:
+            print(f"    {stage} cycles → always   0% (deterministic collapsed)")
+
+
 def main():
     parser = argparse.ArgumentParser(description="HAMesh experiment analyzer")
-    parser.add_argument("--claim",    type=str, choices=["C1","C2","C3","C4","C5"])
-    parser.add_argument("--file",     type=str)
-    parser.add_argument("--sessions", action="store_true")
-    parser.add_argument("--all",      action="store_true", default=True)
+    parser.add_argument("--claim",     type=str, choices=["C1","C2","C3","C4","C5","C5_PHASE"])
+    parser.add_argument("--file",      type=str)
+    parser.add_argument("--sessions",  action="store_true")
+    parser.add_argument("--aggregate", action="store_true",
+                        help="Aggregate all C5_PHASE runs into mean ± std table")
+    parser.add_argument("--all",       action="store_true", default=True)
     args = parser.parse_args()
 
     if not LOGS_DIR.exists():
@@ -322,6 +395,11 @@ def main():
             sys.exit(1)
         print(f"  File: {path.name}")
         reporters[args.claim](load_json(path))
+        return
+
+    # Aggregate C5_PHASE
+    if args.aggregate:
+        aggregate_c5_phase()
         return
 
     # Sessions
