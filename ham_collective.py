@@ -53,6 +53,7 @@ import torch.nn.functional as F
 from ham_core import HolographicMesh
 from ham_brain  import embed, generate, MESH_SAVE, CONFIDENCE_FLOOR, SELF_TEACH_STRENGTH
 from ham_brain  import ingest_directory, ingest_text, DATA_DIR
+from ham_logger import HAMLogger
 
 # ---------------------------------------------------------------------------
 # Default mesh layout — override with --meshes on the command line
@@ -380,6 +381,11 @@ def main():
         "--data-dir", type=str, default=DATA_DIR,
         help=f"Folder of .txt knowledge files ingested into all meshes (default: {DATA_DIR})"
     )
+    parser.add_argument(
+        "--log", type=str, default=None,
+        help="Session name for research logging (e.g. --log session_01). "
+             "Logs saved to ./ham_logs/"
+    )
     args = parser.parse_args()
 
     # Parse mesh spec
@@ -451,6 +457,13 @@ def main():
 
     path_map = mesh_spec  # for saving
 
+    # Optional research logger
+    logger = HAMLogger(args.log) if args.log else None
+    if logger:
+        logger.print_path()
+        for name, ham in meshes.items():
+            logger.log_mesh_snapshot(name, ham.stats(), ham.dominant_memories(n=10))
+
     while True:
         try:
             raw = input("\nCOLLECTIVE> ").strip()
@@ -514,6 +527,8 @@ def main():
                 except ValueError:
                     pass
 
+            energy_before = {n: h.stats()['energy'] for n, h in meshes.items()}
+            folds_before  = {n: h.n_folds           for n, h in meshes.items()}
             results = collective.collective_dream(cycles=cycles)
 
             for name, data in results.items():
@@ -524,6 +539,21 @@ def main():
                     print(f"    {count:4d}x {bar} {text[:50]}")
                 if data['loops']:
                     print(f"  {col}[{name}]{_RESET} loops: {len(data['loops'])} detected")
+                if logger:
+                    logger.log_attractor_snapshot(
+                        mesh_name=name,
+                        attractors=data['attractors'],
+                        loops=data['loops'],
+                        energy_before=energy_before[name],
+                        energy_after=meshes[name].stats()['energy'],
+                        new_folds=meshes[name].n_folds - folds_before[name],
+                        cycles=cycles,
+                    )
+            if logger:
+                logger.log_cross_pollination(
+                    n_shared=sum(len(d['attractors']) for d in results.values()),
+                    mesh_pairs=[(a, b, 8) for a in meshes for b in meshes if a != b],
+                )
 
         # --- curious ---
         elif cmd.startswith('curious'):
@@ -579,12 +609,16 @@ def main():
             print(textwrap.fill(response, width=80,
                                 initial_indent="  ", subsequent_indent="  "))
 
-            # Self-teach across all meshes
+            taught = False
             if activated and activated[0][0] > CONFIDENCE_FLOOR:
                 r_emb = embed(response[:400])
                 for ham in meshes.values():
                     ham.fold(q_emb, r_emb, strength=SELF_TEACH_STRENGTH)
                     ham.remember(r_emb, response[:250])
+                taught = True
+            if logger:
+                logger.log_query(question, 2, activated, response,
+                                 activated[0][0] if activated else 0.0, taught)
 
         # --- default: 1-hop question ---
         else:
@@ -617,12 +651,16 @@ def main():
             print(textwrap.fill(response, width=80,
                                 initial_indent="  ", subsequent_indent="  "))
 
-            # Self-teach
+            taught = False
             if activated and activated[0][0] > CONFIDENCE_FLOOR:
                 r_emb = embed(response[:400])
                 for ham in meshes.values():
                     ham.fold(q_emb, r_emb, strength=SELF_TEACH_STRENGTH)
                     ham.remember(r_emb, response[:250])
+                taught = True
+            if logger:
+                logger.log_query(question, 1, activated, response,
+                                 activated[0][0] if activated else 0.0, taught)
 
 
 if __name__ == "__main__":
