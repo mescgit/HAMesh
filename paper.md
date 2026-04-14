@@ -151,9 +151,15 @@ The science mesh's cryptography cluster (Key Exchange → Hashing → Number The
 
 **Claim.** After cross-pollination, each mesh develops curiosity about topics from the other mesh's domain.
 
-**Method.** Measure isolated memories per mesh before and after cross-pollination; count new gaps whose text includes markers from the other mesh's domain.
+**Method.** After cross-pollination, we scan every memory in each mesh for `[from X]` markers indicating foreign origin, then measure each such memory's isolation score (mean cosine similarity to its 3 nearest neighbours). Memories with isolation score below 0.3 are curiosity gaps; those above 0.3 are integrated bridges. This directly tests whether transferred knowledge sits unintegrated (would activate curiosity) or merges smoothly into the host topology.
 
-**Results.** After one cross-pollination pass, the science mesh acquired "[from philosophy] Battle of Stalingrad" as an isolated memory — a history topic that became a knowledge gap in the science mesh after philosophy's history knowledge bled in. The science mesh generated curiosity questions connecting strategic warfare to mathematical optimisation. Cross-domain gap fraction increased measurably post-pollination.
+**Results.** Cross-pollination transferred 16 cross-domain memories into each mesh (32 total). All 32 had high connectivity scores (science mesh: 0.826–0.861; philosophy mesh: 0.959–0.969), placing them firmly in the integrated category with zero isolation score below 0.3. Contrary to the initial hypothesis, dominant memories selected by power iteration (the cross-pollination signal) are by construction already well-connected in the source mesh and arrive pre-adapted to connect in the target.
+
+The science mesh exhibited 5 pre-existing `[from philosophy]` memories before this cross-pollination pass (from a prior session), and these too were well-connected — suggesting that even earlier foreign memories had already integrated.
+
+**Revision.** The original claim was too strong: cross-pollination does not reliably create curiosity *gaps*. Instead it creates cross-domain *bridges*. The curiosity engine finds gaps from *distillation imbalance* — topics that were mentioned but never deeply folded — rather than from cross-pollination per se. We revise the claim to: *cross-pollination creates semantic bridges between domains; curiosity gaps emerge from the asymmetry between what is known and what was only mentioned*.
+
+**Verdict.** PARTIALLY SUPPORTS C3 — cross-domain memories are created but integrate immediately rather than persisting as isolation targets.
 
 ### C4: Curiosity Synthesis Is Cross-Domain
 

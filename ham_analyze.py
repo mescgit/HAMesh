@@ -1,5 +1,5 @@
 """
-HAM Analyzer — Read experiment JSON logs and report results clearly
+HAM Analyzer -- Read experiment JSON logs and report results clearly
 
 Usage:
   python ham_analyze.py                    # summarize all experiments in ham_logs/
@@ -50,9 +50,9 @@ def latest_for_claim(claim: str) -> Path | None:
 # ---------------------------------------------------------------------------
 
 def report_c1(data: dict):
-    print("\n  ╔══════════════════════════════════════════════════════╗")
-    print("  ║  C1 — Attractor Convergence Determinism              ║")
-    print("  ╚══════════════════════════════════════════════════════╝")
+    print("\n  +======================================================+")
+    print("  |  C1 -- Attractor Convergence Determinism              |")
+    print("  +======================================================+")
     print(f"  Hypothesis: {data['hypothesis']}")
     print(f"  Dream cycles per run: {data['dream_cycles_per_run']}")
     print(f"  Independent runs: {data['n_runs']}")
@@ -74,16 +74,16 @@ def report_c1(data: dict):
 
     # Interpretation
     if all(m["avg_pairwise_overlap"] == 1.0 for m in data["meshes"].values()):
-        print("\n  ✓ Perfect overlap (1.000) across all run pairs.")
+        print("\n  [ok] Perfect overlap (1.000) across all run pairs.")
         print("  The attractor basins are fully deterministic given the mesh state.")
-        print("  This is a strong result for the paper — same mesh always converges")
+        print("  This is a strong result for the paper -- same mesh always converges")
         print("  to the same concepts regardless of random seed order.")
 
 
 def report_c2(data: dict):
-    print("\n  ╔══════════════════════════════════════════════════════╗")
-    print("  ║  C2 — Semantic Coherence of Attractor Clusters       ║")
-    print("  ╚══════════════════════════════════════════════════════╝")
+    print("\n  +======================================================+")
+    print("  |  C2 -- Semantic Coherence of Attractor Clusters       |")
+    print("  +======================================================+")
     print(f"  Hypothesis: {data['hypothesis']}")
 
     for mesh_name, m in data["meshes"].items():
@@ -99,32 +99,41 @@ def report_c2(data: dict):
 
 
 def report_c3(data: dict):
-    print("\n  ╔══════════════════════════════════════════════════════╗")
-    print("  ║  C3 — Cross-Pollination Creates Cross-Domain Curiosity║")
-    print("  ╚══════════════════════════════════════════════════════╝")
+    print("\n  +======================================================+")
+    print("  |  C3 -- Cross-Pollination Creates Cross-Domain Curiosity|")
+    print("  +======================================================+")
     print(f"  Hypothesis: {data['hypothesis']}")
 
     for mesh_name in data.get("after", {}):
         after = data["after"][mesh_name]
-        before_gaps = data["before"].get(mesh_name, {}).get("gaps", [])
+        before = data["before"].get(mesh_name, {})
+        before_gaps = before.get("gaps", [])
+        pre_xd = before.get("pre_existing_cross_domain_isolated", [])
         print(f"\n  [{mesh_name}]")
-        print(f"    Gaps before : {len(before_gaps)}")
-        print(f"    Gaps after  : {len(after.get('gaps', []))}")
-        new = after.get("new_gaps", [])
-        cross = after.get("cross_domain_new_gaps", [])
-        frac = after.get("cross_domain_fraction", 0)
-        print(f"    New gaps    : {len(new)}")
-        print(f"    Cross-domain: {len(cross)} ({frac:.1%})")
-        for g in cross[:3]:
-            print(f"      ✓ {g[:70]}")
+        print(f"    Isolated gaps before         : {len(before_gaps)}")
+        print(f"    Pre-existing cross-domain    : {len(pre_xd)}")
+        xd_total    = after.get("xd_total", 0)
+        xd_iso      = after.get("xd_isolated", [])
+        xd_con      = after.get("xd_connected", [])
+        xd_iso_frac = after.get("xd_isolated_frac", 0)
+        print(f"    Cross-domain memories added  : {xd_total}")
+        print(f"    -- isolated (curiosity gaps) : {len(xd_iso)} ({xd_iso_frac:.0%})")
+        print(f"    -- integrated (bridges)      : {len(xd_con)}")
+        for s, t in xd_iso[:3]:
+            print(f"      [iso] {s:.3f}  {str(t)[:65]}")
+        for s, t in xd_con[:2]:
+            print(f"      [int] {s:.3f}  {str(t)[:65]}")
 
+    note = data.get("note", "")
+    if note:
+        print(f"\n  Note: {note}")
     print(f"\n  Overall: {data['conclusion']}")
 
 
 def report_c4(data: dict):
-    print("\n  ╔══════════════════════════════════════════════════════╗")
-    print("  ║  C4 — Curiosity Synthesis Is Genuinely Cross-Domain  ║")
-    print("  ╚══════════════════════════════════════════════════════╝")
+    print("\n  +======================================================+")
+    print("  |  C4 -- Curiosity Synthesis Is Genuinely Cross-Domain  |")
+    print("  +======================================================+")
     print(f"  Hypothesis: {data['hypothesis']}")
     print(f"  Gaps tested: {data['n_gaps_tested']}")
 
@@ -132,7 +141,7 @@ def report_c4(data: dict):
     total = len(insights)
 
     if total == 0:
-        print("\n  ⚠ No insights recorded — experiment may have failed silently.")
+        print("\n  [!] No insights recorded -- experiment may have failed silently.")
         print("  Check that Bonsai server is running and responding.")
         print("  Try: curl http://localhost:22334/v1/models")
         return
@@ -156,12 +165,12 @@ def report_c4(data: dict):
             shown += 1
 
     if shown == 0:
-        print("\n  ⚠ No cross-domain insights found.")
+        print("\n  [!] No cross-domain insights found.")
         print("  All insights activated only one mesh domain.")
         print("  Possible causes:")
         print("    - Meshes need more cross-pollination (run 'dream 1000' then 'cross')")
         print("    - CONFIDENCE_FLOOR too high (currently 0.15)")
-        print("    - Mesh energy too low — try more distillation")
+        print("    - Mesh energy too low -- try more distillation")
 
     # Integrity check
     print(f"\n  Integrity:")
@@ -170,13 +179,13 @@ def report_c4(data: dict):
     print(f"    Insights with real questions : {gaps_with_q}/{total}")
     print(f"    Insights with real answers   : {gaps_with_a}/{total}")
     if gaps_with_q < total or gaps_with_a < total:
-        print("    ⚠ Some insights appear empty — possible silent API errors")
+        print("    [!] Some insights appear empty -- possible silent API errors")
 
 
 def report_c5(data: dict):
-    print("\n  ╔══════════════════════════════════════════════════════╗")
-    print("  ║  C5 — Multi-Hop Follows Transitive Chains            ║")
-    print("  ╚══════════════════════════════════════════════════════╝")
+    print("\n  +======================================================+")
+    print("  |  C5 -- Multi-Hop Follows Transitive Chains            |")
+    print("  +======================================================+")
     print(f"  Hypothesis: {data['hypothesis']}")
     print(f"  Queries tested: {data['queries_tested']}")
 
@@ -193,12 +202,12 @@ def report_c5(data: dict):
         same_queries      = [q for q in m["query_results"] if not q["different"]]
         for q in different_queries[:2]:
             print(f"      Q: {q['question'][:55]}")
-            print(f"         1-hop → {q['1hop_top'][:45]!r}")
-            print(f"         2-hop → {q['2hop_top'][:45]!r}")
+            print(f"         1-hop -> {q['1hop_top'][:45]!r}")
+            print(f"         2-hop -> {q['2hop_top'][:45]!r}")
             print()
 
         if not different_queries:
-            print("      ⚠ No queries produced different 1-hop vs 2-hop results.")
+            print("      [!] No queries produced different 1-hop vs 2-hop results.")
             print("      The mesh may have collapsed to few dominant attractors.")
             print("      Try running 'dream 500' then retry C5.")
 
@@ -208,7 +217,7 @@ def report_c5(data: dict):
     for mesh_name, m in data["meshes"].items():
         delta = m["avg_1hop_sim"] - m["avg_2hop_sim"]
         if abs(delta) < 0.001:
-            print(f"\n  ⚠ [{mesh_name}] 1-hop and 2-hop similarities are identical ({delta:+.4f}).")
+            print(f"\n  [!] [{mesh_name}] 1-hop and 2-hop similarities are identical ({delta:+.4f}).")
             print("  This suggests the mesh may be fully collapsed to a single attractor.")
             print("  The diffraction is cycling back to the same point regardless of hops.")
 
@@ -240,9 +249,9 @@ def report_session(path: Path):
         for s in snapshots[-3:]:  # last 3
             mesh  = s["mesh"]
             top   = [a["text"][:40] for a in s["attractors"][:3]]
-            print(f"    [{mesh}] {s['cycles']} cycles | energy Δ{s['energy_delta']:+.0f}")
+            print(f"    [{mesh}] {s['cycles']} cycles | energy delta{s['energy_delta']:+.0f}")
             for t in top:
-                print(f"      • {t}")
+                print(f"      * {t}")
 
     # Curiosity insights
     insights = [r for r in records if r["type"] == "curiosity_insight"]
@@ -251,7 +260,7 @@ def report_session(path: Path):
         print(f"\n  Curiosity insights: {len(insights)} total, {len(cross)} cross-domain")
         for i in cross[:2]:
             print(f"    [{', '.join(i['meshes_activated'])}] {i['question'][:70]}")
-            print(f"    → {i['answer'][:100]}...")
+            print(f"    -> {i['answer'][:100]}...")
 
     # Queries
     queries = [r for r in records if r["type"] == "query"]
@@ -266,7 +275,7 @@ def report_session(path: Path):
 
 def aggregate_c5_phase():
     """
-    Reads ALL C5_PHASE result files and computes mean ± std dev
+    Reads ALL C5_PHASE result files and computes mean +/- std dev
     across runs for each dream stage. This is what goes in the paper.
     """
     files = sorted(LOGS_DIR.glob("experiment_C5_PHASE_*.json"),
@@ -311,9 +320,9 @@ def aggregate_c5_phase():
         n    = len(vals)
 
         if std < 0.05 and mean > 0.9:
-            state = "✓ deterministic distributed"
+            state = "[ok] deterministic distributed"
         elif std < 0.05 and mean < 0.1:
-            state = "✗ deterministic collapsed"
+            state = "[x] deterministic collapsed"
         elif mean > 0.6:
             state = "~ stochastic (mostly distributed)"
         elif mean > 0.3:
@@ -330,9 +339,9 @@ def aggregate_c5_phase():
         mean = sum(vals) / len(vals)
         std  = statistics.stdev(vals) if len(vals) > 1 else 0.0
         if std < 0.05 and mean > 0.9:
-            print(f"    {stage} cycles → always 100% (deterministic distributed) ← USE THIS")
+            print(f"    {stage} cycles -> always 100% (deterministic distributed) <- USE THIS")
         elif std < 0.05 and mean < 0.1:
-            print(f"    {stage} cycles → always   0% (deterministic collapsed)")
+            print(f"    {stage} cycles -> always   0% (deterministic collapsed)")
 
 
 def main():
@@ -341,7 +350,7 @@ def main():
     parser.add_argument("--file",      type=str)
     parser.add_argument("--sessions",  action="store_true")
     parser.add_argument("--aggregate", action="store_true",
-                        help="Aggregate all C5_PHASE runs into mean ± std table")
+                        help="Aggregate all C5_PHASE runs into mean +/- std table")
     parser.add_argument("--all",       action="store_true", default=True)
     args = parser.parse_args()
 
@@ -351,16 +360,16 @@ def main():
         sys.exit(1)
 
     def report_c5_phase(data: dict):
-        print("\n  ╔══════════════════════════════════════════════════════╗")
-        print("  ║  C5-PHASE: Multi-Hop Phase Transition                ║")
-        print("  ╚══════════════════════════════════════════════════════╝")
+        print("\n  +======================================================+")
+        print("  |  C5-PHASE: Multi-Hop Phase Transition                |")
+        print("  +======================================================+")
         print(f"  Hypothesis: {data['hypothesis']}")
         print()
         print(f"  {'Cycles':>8}  {'Energy':>8}  {'Diversity':>10}  {'State'}")
         print(f"  {'-'*8}  {'-'*8}  {'-'*10}  {'-'*15}")
         for stage, s in sorted(data["stages"].items(), key=lambda x: int(x[0])):
             df = s["different_fraction"]
-            state = "✓ distributed" if df > 0.4 else "~ partial" if df > 0.1 else "✗ collapsed"
+            state = "[ok] distributed" if df > 0.4 else "~ partial" if df > 0.1 else "[x] collapsed"
             print(f"  {stage:>8}  {s['mesh_energy']:>8.1f}  {df:>10.0%}  {state}")
         print()
         print(f"  Collapse: {data.get('conclusion', '?')}")
@@ -435,7 +444,7 @@ def main():
                 elif claim == "C5":
                     for mname, m in data.get("meshes", {}).items():
                         print(f"    [{mname}] different: {m['different_fraction']:.1%}")
-                print(f"    → {conclusion}")
+                print(f"    -> {conclusion}")
             except Exception as e:
                 print(f"    Error reading: {e}")
 
