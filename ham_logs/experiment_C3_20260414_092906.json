@@ -1,0 +1,91 @@
+{
+  "claim": "C3",
+  "hypothesis": "Cross-pollination causes each mesh to develop curiosity about the other domain",
+  "before": {
+    "science": {
+      "gaps": [
+        "Schrödinger Equation",
+        "[from philosophy] In ancient Greece, politics were deeply intertwined with the city-states, or *polis*, which were independent city-states such as Athens, Sparta, and Corinth. These polis were governed by a combination of institutions, including the *ekphrasis* (a system where citizens funded the creation of art and ",
+        "[from philosophy] The Holocaust was the systematic, state-sponsored persecution and murder of approximately six million Jews by Nazi Germany and its collaborators during World War II. Rooted in antisemitism, racial ideology, and the Nazi belief in a \"master race,\" the Holocaust was carried out through a network of co",
+        "[from philosophy] D-Day, also known as Normandy Day, was the code name for the Allied invasion of Nazi-occupied France during World War II. It took place on June 6, 1944, with the main assault landing on the Normandy coast, specifically at the beaches of Omaha, Utah, Gold, Juno, and Sword. The operation was part of O",
+        "Capacitance and Inductance",
+        "[from philosophy] The Battle of Stalingrad (1942–1943) was a pivotal turning point in World War II, marking the first major defeat of Nazi Germany on the Eastern Front. Fought primarily in the city of Stalingrad (now Volgograd), the battle was a brutal urban warfare campaign where German forces, under General Friedri",
+        "Earthquakes",
+        "Plate tectonics",
+        "Wave-Particle Duality",
+        "Eigenvalues and Eigenvectors",
+        "Diophantine equations",
+        "ACID properties are fundamental characteristics that ensure the reliability and consistency of database transactions. ACID stands for **Atomicity**, **Consistency**, **Isolation**, and **Durability**. Atomicity ensures that a transaction is treated as a single, indivisible unit—either it completes e",
+        "Metamorphism",
+        "Hilbert's Hotel",
+        "Black Holes"
+      ]
+    },
+    "philosophy": {
+      "gaps": [
+        "Battle of Stalingrad",
+        "Carbon sequestration",
+        "The Treaty of Versailles",
+        "[from science] Interrupt handling in operating systems is the process by which the system manages asynchronous events—such as timer ticks, I/O completion, or user input—that require immediate attention. When an interrupt occurs, the CPU is temporarily suspended, and the control is transferred to an interrupt servi",
+        "Decomposers",
+        "Deep-sea ecosystems",
+        "Key explorers and their voyages",
+        "1. Sand dunes",
+        "The Entente Powers",
+        "The Holocaust was the systematic, state-sponsored persecution and murder of approximately six million Jews by Nazi Germany and its collaborators during World War II. Rooted in antisemitism, racial ideology, and the Nazi belief in a \"master race,\" the Holocaust was carried out through a network of co",
+        "Renaissance",
+        "Virtue",
+        "The legal framework of the Roman Empire was primarily based on the principle of *ius civile* (civil law), which was a system of laws that applied to citizens regardless of their origin. This law was developed over centuries and was codified in the *Corpus Juris Civilis* (Body of Civil Law), compiled",
+        "D-Day, also known as Normandy Day, was the code name for the Allied invasion of Nazi-occupied France during World War II. It took place on June 6, 1944, with the main assault landing on the Normandy coast, specifically at the beaches of Omaha, Utah, Gold, Juno, and Sword. The operation was part of O",
+        "The Black Death was a devastating pandemic that swept through medieval Europe between 1347 and 1351, killing an estimated 30% to 60% of the population. It was caused by the bacterium *Yersinia pestis*, which was transmitted primarily through the bite of infected fleas carried by rats. The disease sp"
+      ]
+    }
+  },
+  "after": {
+    "science": {
+      "gaps": [
+        "Schrödinger Equation",
+        "[from philosophy] In ancient Greece, politics were deeply intertwined with the city-states, or *polis*, which were independent city-states such as Athens, Sparta, and Corinth. These polis were governed by a combination of institutions, including the *ekphrasis* (a system where citizens funded the creation of art and ",
+        "[from philosophy] The Holocaust was the systematic, state-sponsored persecution and murder of approximately six million Jews by Nazi Germany and its collaborators during World War II. Rooted in antisemitism, racial ideology, and the Nazi belief in a \"master race,\" the Holocaust was carried out through a network of co",
+        "[from philosophy] D-Day, also known as Normandy Day, was the code name for the Allied invasion of Nazi-occupied France during World War II. It took place on June 6, 1944, with the main assault landing on the Normandy coast, specifically at the beaches of Omaha, Utah, Gold, Juno, and Sword. The operation was part of O",
+        "Capacitance and Inductance",
+        "[from philosophy] The Battle of Stalingrad (1942–1943) was a pivotal turning point in World War II, marking the first major defeat of Nazi Germany on the Eastern Front. Fought primarily in the city of Stalingrad (now Volgograd), the battle was a brutal urban warfare campaign where German forces, under General Friedri",
+        "Earthquakes",
+        "Plate tectonics",
+        "Wave-Particle Duality",
+        "Eigenvalues and Eigenvectors",
+        "Diophantine equations",
+        "ACID properties are fundamental characteristics that ensure the reliability and consistency of database transactions. ACID stands for **Atomicity**, **Consistency**, **Isolation**, and **Durability**. Atomicity ensures that a transaction is treated as a single, indivisible unit—either it completes e",
+        "Metamorphism",
+        "Hilbert's Hotel",
+        "Black Holes"
+      ],
+      "new_gaps": [],
+      "cross_domain_new_gaps": [],
+      "cross_domain_fraction": 0.0
+    },
+    "philosophy": {
+      "gaps": [
+        "Battle of Stalingrad",
+        "Carbon sequestration",
+        "The Treaty of Versailles",
+        "[from science] Interrupt handling in operating systems is the process by which the system manages asynchronous events—such as timer ticks, I/O completion, or user input—that require immediate attention. When an interrupt occurs, the CPU is temporarily suspended, and the control is transferred to an interrupt servi",
+        "Decomposers",
+        "Deep-sea ecosystems",
+        "Key explorers and their voyages",
+        "1. Sand dunes",
+        "The Entente Powers",
+        "The Holocaust was the systematic, state-sponsored persecution and murder of approximately six million Jews by Nazi Germany and its collaborators during World War II. Rooted in antisemitism, racial ideology, and the Nazi belief in a \"master race,\" the Holocaust was carried out through a network of co",
+        "Renaissance",
+        "Virtue",
+        "The legal framework of the Roman Empire was primarily based on the principle of *ius civile* (civil law), which was a system of laws that applied to citizens regardless of their origin. This law was developed over centuries and was codified in the *Corpus Juris Civilis* (Body of Civil Law), compiled",
+        "D-Day, also known as Normandy Day, was the code name for the Allied invasion of Nazi-occupied France during World War II. It took place on June 6, 1944, with the main assault landing on the Normandy coast, specifically at the beaches of Omaha, Utah, Gold, Juno, and Sword. The operation was part of O",
+        "The Black Death was a devastating pandemic that swept through medieval Europe between 1347 and 1351, killing an estimated 30% to 60% of the population. It was caused by the bacterium *Yersinia pestis*, which was transmitted primarily through the bite of infected fleas carried by rats. The disease sp"
+      ],
+      "new_gaps": [],
+      "cross_domain_new_gaps": [],
+      "cross_domain_fraction": 0.0
+    }
+  },
+  "conclusion": "MIXED"
+}

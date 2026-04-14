@@ -1,0 +1,10 @@
+{
+  "timestamp": "20260414_134348",
+  "meshes": [
+    "science",
+    "philosophy"
+  ],
+  "results": {
+    "C3": "ERROR: 'charmap' codec can't encode character '\\u2190' in position 79: character maps to <undefined>"
+  }
+}

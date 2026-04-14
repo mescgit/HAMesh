@@ -1,0 +1,37 @@
+{
+  "session_name": "session_01",
+  "started_at": "2026-04-14T01:20:41.272282+00:00",
+  "total_events": 6,
+  "dream_runs": [
+    {
+      "mesh": "science",
+      "cycles": 1000,
+      "top_5": [
+        "Key exchange protocols",
+        "Hashing algorithms",
+        "computer architecture",
+        "graph theory",
+        "number theory"
+      ],
+      "n_loops": 3,
+      "energy_delta": 158.54
+    },
+    {
+      "mesh": "philosophy",
+      "cycles": 1000,
+      "top_5": [
+        "The nature of thought and cognition",
+        "philosophy of mind",
+        "The role of perception and experience",
+        "utilitarianism",
+        "medieval Europe"
+      ],
+      "n_loops": 3,
+      "energy_delta": 158.24
+    }
+  ],
+  "curiosity_runs": [],
+  "query_count": 0,
+  "total_insights": 0,
+  "cross_pollinations": 1
+}

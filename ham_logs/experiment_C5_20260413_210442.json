@@ -1,0 +1,184 @@
+{
+  "claim": "C5",
+  "hypothesis": "2-hop activates semantically different (more transitive) memories than 1-hop",
+  "queries_tested": 10,
+  "meshes": {
+    "science": {
+      "query_results": [
+        {
+          "question": "What is the relationship between entropy and information?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.858,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "How does evolutionary pressure create structure?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8586,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "What is the foundation of number theory?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8588,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "How does perception relate to reality?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8585,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "What connects cryptography to mathematics?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.859,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "How does memory shape identity?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8591,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "What is the nature of consciousness?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8586,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "How do systems self-organize?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8587,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "What is the role of symmetry in physics?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.858,
+          "2hop_sim": 0.8601,
+          "different": false
+        },
+        {
+          "question": "How does language shape thought?",
+          "1hop_top": "computer architecture",
+          "2hop_top": "computer architecture",
+          "1hop_sim": 0.8591,
+          "2hop_sim": 0.8601,
+          "different": false
+        }
+      ],
+      "different_fraction": 0.0,
+      "avg_1hop_sim": 0.859,
+      "avg_2hop_sim": 0.86,
+      "verdict": "REFUTES C5"
+    },
+    "philosophy": {
+      "query_results": [
+        {
+          "question": "What is the relationship between entropy and information?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8778,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "How does evolutionary pressure create structure?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8778,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "What is the foundation of number theory?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8779,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "How does perception relate to reality?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8782,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "What connects cryptography to mathematics?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8776,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "How does memory shape identity?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8778,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "What is the nature of consciousness?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8777,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "How do systems self-organize?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8776,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "What is the role of symmetry in physics?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8778,
+          "2hop_sim": 0.8772,
+          "different": false
+        },
+        {
+          "question": "How does language shape thought?",
+          "1hop_top": "The nature of thought and cognition",
+          "2hop_top": "The nature of thought and cognition",
+          "1hop_sim": 0.8778,
+          "2hop_sim": 0.8772,
+          "different": false
+        }
+      ],
+      "different_fraction": 0.0,
+      "avg_1hop_sim": 0.878,
+      "avg_2hop_sim": 0.877,
+      "verdict": "REFUTES C5"
+    }
+  },
+  "conclusion": "MIXED"
+}

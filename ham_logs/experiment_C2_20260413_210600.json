@@ -1,0 +1,89 @@
+{
+  "claim": "C2",
+  "hypothesis": "Attractor clusters have higher semantic coherence than random memory samples",
+  "meshes": {
+    "science": {
+      "attractor_coherence": 0.8,
+      "random_baseline_avg": 0.5,
+      "random_baseline_scores": [
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "delta": 0.3,
+      "top_5_attractors": [
+        [
+          "computer architecture",
+          500
+        ],
+        [
+          "number theory",
+          500
+        ],
+        [
+          "graph theory",
+          500
+        ],
+        [
+          "Key exchange protocols",
+          424
+        ],
+        [
+          "Hashing algorithms",
+          266
+        ]
+      ],
+      "n_loops": 11,
+      "verdict": "SUPPORTS C2"
+    },
+    "philosophy": {
+      "attractor_coherence": 0.7,
+      "random_baseline_avg": 0.48,
+      "random_baseline_scores": [
+        0.5,
+        0.5,
+        0.5,
+        0.3,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5,
+        0.5
+      ],
+      "delta": 0.22,
+      "top_5_attractors": [
+        [
+          "The nature of thought and cognition",
+          500
+        ],
+        [
+          "philosophy of mind",
+          500
+        ],
+        [
+          "utilitarianism",
+          500
+        ],
+        [
+          "The role of perception and experience",
+          500
+        ],
+        [
+          "medieval Europe",
+          495
+        ]
+      ],
+      "n_loops": 3,
+      "verdict": "SUPPORTS C2"
+    }
+  },
+  "conclusion": "SUPPORTS C2"
+}

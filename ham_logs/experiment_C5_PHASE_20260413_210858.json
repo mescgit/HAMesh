@@ -1,0 +1,64 @@
+{
+  "claim": "C5-PHASE",
+  "hypothesis": "Multi-hop diversity degrades with dreaming — a phase transition",
+  "stages": {
+    "0": {
+      "dream_cycles": 0,
+      "mesh_energy": 247.5,
+      "different_fraction": 0.0,
+      "avg_1hop_sim": 0.8586,
+      "avg_2hop_sim": 0.8601
+    },
+    "100": {
+      "dream_cycles": 100,
+      "mesh_energy": 243.2,
+      "different_fraction": 1.0,
+      "avg_1hop_sim": 0.8631,
+      "avg_2hop_sim": 0.8646
+    },
+    "200": {
+      "dream_cycles": 200,
+      "mesh_energy": 234.9,
+      "different_fraction": 0.6,
+      "avg_1hop_sim": 0.8677,
+      "avg_2hop_sim": 0.8691
+    },
+    "300": {
+      "dream_cycles": 300,
+      "mesh_energy": 227.7,
+      "different_fraction": 0.0,
+      "avg_1hop_sim": 0.8722,
+      "avg_2hop_sim": 0.8736
+    },
+    "400": {
+      "dream_cycles": 400,
+      "mesh_energy": 221.0,
+      "different_fraction": 0.0,
+      "avg_1hop_sim": 0.8766,
+      "avg_2hop_sim": 0.878
+    },
+    "500": {
+      "dream_cycles": 500,
+      "mesh_energy": 215.4,
+      "different_fraction": 1.0,
+      "avg_1hop_sim": 0.8809,
+      "avg_2hop_sim": 0.8824
+    },
+    "700": {
+      "dream_cycles": 700,
+      "mesh_energy": 205.8,
+      "different_fraction": 1.0,
+      "avg_1hop_sim": 0.8893,
+      "avg_2hop_sim": 0.8908
+    },
+    "1000": {
+      "dream_cycles": 1000,
+      "mesh_energy": 195.4,
+      "different_fraction": 1.0,
+      "avg_1hop_sim": 0.9011,
+      "avg_2hop_sim": 0.9028
+    }
+  },
+  "conclusion": "Phase transition occurs around 300 dream cycles",
+  "collapse_at_cycles": 300
+}

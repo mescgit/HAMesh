@@ -1,0 +1,148 @@
+{
+  "claim": "C3",
+  "hypothesis": "Cross-pollination causes each mesh to develop curiosity about the other domain",
+  "before": {
+    "science": {
+      "gaps": [
+        "Schrödinger Equation",
+        "[from philosophy] In ancient Greece, drama was a central form of artistic and cultural expression, often performed at festivals such as the Dionysia. It typically involved a chorus, a central dramatic group, and a narrative that explored moral and philosophical themes. Plays were performed in a semicircular theater, ",
+        "[from philosophy] The Cuban Missile Crisis, which occurred in October 1962, was a pivotal event during the Cold War, bringing the United States and the Soviet Union to the brink of nuclear war. It arose when the Soviet Union, under Nikita Khrushchev, secretly deployed nuclear missiles to Cuba, a U.S. ally and a key p",
+        "[from philosophy] Castles and fortifications in medieval Europe were essential structures used for defense, governance, and economic control. They were typically built on high ground, with thick stone walls, towers, and moats to deter enemy attacks. These structures served as both military strongholds and administrat",
+        "[from philosophy] The Schlieffen Plan was a military strategy proposed by Germany's Chief of Staff, Heinz Guderian, in 1905. It aimed to quickly defeat France by a two-front war, using a rapid, armored advance through Belgium to bypass the defenses of the Low Countries. The plan assumed that a swift German attack wou",
+        "[from philosophy] The Treaty of Versailles, signed in 1919, officially ended World War I by imposing severe penalties on Germany. It required Germany to accept full responsibility for the war, pay substantial reparations, and lose significant territory, including Alsace-Lorraine to France and parts of Prussia to Pola",
+        "Eigenvalues and eigenvectors",
+        "Plate tectonics",
+        "Wave-Particle Duality",
+        "Continuum Hypothesis",
+        "Fossils and stratigraphy",
+        "Diophantine equations",
+        "Black Holes",
+        "Memory Hierarchy",
+        "Common Descent"
+      ],
+      "pre_existing_cross_domain_isolated": [
+        "[from philosophy] In ancient Greece, drama was a central form of artistic and cultural expression, often performed at festivals such as the Dionysia. It typically involved a chorus, a central dramatic group, and a narrative that explored moral and philosophical themes. Plays were performed in a semicircular theater, ",
+        "[from philosophy] The Cuban Missile Crisis, which occurred in October 1962, was a pivotal event during the Cold War, bringing the United States and the Soviet Union to the brink of nuclear war. It arose when the Soviet Union, under Nikita Khrushchev, secretly deployed nuclear missiles to Cuba, a U.S. ally and a key p",
+        "[from philosophy] Castles and fortifications in medieval Europe were essential structures used for defense, governance, and economic control. They were typically built on high ground, with thick stone walls, towers, and moats to deter enemy attacks. These structures served as both military strongholds and administrat",
+        "[from philosophy] The Schlieffen Plan was a military strategy proposed by Germany's Chief of Staff, Heinz Guderian, in 1905. It aimed to quickly defeat France by a two-front war, using a rapid, armored advance through Belgium to bypass the defenses of the Low Countries. The plan assumed that a swift German attack wou",
+        "[from philosophy] The Treaty of Versailles, signed in 1919, officially ended World War I by imposing severe penalties on Germany. It required Germany to accept full responsibility for the war, pay substantial reparations, and lose significant territory, including Alsace-Lorraine to France and parts of Prussia to Pola"
+      ]
+    },
+    "philosophy": {
+      "gaps": [
+        "Battle of Stalingrad",
+        "The Schlieffen Plan",
+        "Carbon sequestration",
+        "Being-in-the-World",
+        "The Treaty of Versailles",
+        "Self-Discipline",
+        "Chlorophyll",
+        "Stromatium",
+        "The Triple Entente",
+        "Decomposers",
+        "The Black Death was a devastating pandemic that swept across medieval Europe between 1347 and 1351, causing an estimated 30% to 60% of the population to die. It was caused by the bacterium *Yersinia pestis*, which was transmitted primarily through the bite of infected fleas carrying the bacterium. T",
+        "Deep-sea ecosystems",
+        "Ridge volcanism and mid-ocean ridges",
+        "Renaissance",
+        "A Priori Knowledge"
+      ],
+      "pre_existing_cross_domain_isolated": []
+    }
+  },
+  "after": {
+    "science": {
+      "gaps": [
+        "Schrödinger Equation",
+        "[from philosophy] In ancient Greece, drama was a central form of artistic and cultural expression, often performed at festivals such as the Dionysia. It typically involved a chorus, a central dramatic group, and a narrative that explored moral and philosophical themes. Plays were performed in a semicircular theater, ",
+        "[from philosophy] The Cuban Missile Crisis, which occurred in October 1962, was a pivotal event during the Cold War, bringing the United States and the Soviet Union to the brink of nuclear war. It arose when the Soviet Union, under Nikita Khrushchev, secretly deployed nuclear missiles to Cuba, a U.S. ally and a key p",
+        "[from philosophy] Castles and fortifications in medieval Europe were essential structures used for defense, governance, and economic control. They were typically built on high ground, with thick stone walls, towers, and moats to deter enemy attacks. These structures served as both military strongholds and administrat",
+        "[from philosophy] The Schlieffen Plan was a military strategy proposed by Germany's Chief of Staff, Heinz Guderian, in 1905. It aimed to quickly defeat France by a two-front war, using a rapid, armored advance through Belgium to bypass the defenses of the Low Countries. The plan assumed that a swift German attack wou",
+        "[from philosophy] The Treaty of Versailles, signed in 1919, officially ended World War I by imposing severe penalties on Germany. It required Germany to accept full responsibility for the war, pay substantial reparations, and lose significant territory, including Alsace-Lorraine to France and parts of Prussia to Pola",
+        "Eigenvalues and eigenvectors",
+        "Plate tectonics",
+        "Wave-Particle Duality",
+        "Continuum Hypothesis",
+        "Fossils and stratigraphy",
+        "Diophantine equations",
+        "Black Holes",
+        "Memory Hierarchy",
+        "Common Descent"
+      ],
+      "new_gaps": [],
+      "new_xd_gaps": [],
+      "xd_total": 16,
+      "xd_isolated": [],
+      "xd_connected": [
+        [
+          0.861,
+          "[from philosophy] Ridge volcanism refers to the formation of volcanic islands an"
+        ],
+        [
+          0.826,
+          "[from philosophy] Plate boundaries are the edges where tectonic plates interact,"
+        ],
+        [
+          0.636,
+          "[from philosophy] In ancient Greece, drama was a central form of artistic and cu"
+        ],
+        [
+          0.642,
+          "[from philosophy] The Cuban Missile Crisis, which occurred in October 1962, was "
+        ],
+        [
+          0.675,
+          "[from philosophy] The Treaty of Versailles, signed in 1919, officially ended Wor"
+        ]
+      ],
+      "xd_isolated_frac": 0.0
+    },
+    "philosophy": {
+      "gaps": [
+        "Battle of Stalingrad",
+        "The Schlieffen Plan",
+        "Carbon sequestration",
+        "Being-in-the-World",
+        "The Treaty of Versailles",
+        "Self-Discipline",
+        "Chlorophyll",
+        "Stromatium",
+        "The Triple Entente",
+        "Decomposers",
+        "The Black Death was a devastating pandemic that swept across medieval Europe between 1347 and 1351, causing an estimated 30% to 60% of the population to die. It was caused by the bacterium *Yersinia pestis*, which was transmitted primarily through the bite of infected fleas carrying the bacterium. T",
+        "Deep-sea ecosystems",
+        "Ridge volcanism and mid-ocean ridges",
+        "Renaissance",
+        "A Priori Knowledge"
+      ],
+      "new_gaps": [],
+      "new_xd_gaps": [],
+      "xd_total": 16,
+      "xd_isolated": [],
+      "xd_connected": [
+        [
+          0.959,
+          "[from science] number theory"
+        ],
+        [
+          0.969,
+          "[from science] genetics"
+        ],
+        [
+          0.954,
+          "[from science] graph theory"
+        ],
+        [
+          0.947,
+          "[from science] computer architecture"
+        ],
+        [
+          0.973,
+          "[from science] geology"
+        ]
+      ],
+      "xd_isolated_frac": 0.0
+    }
+  },
+  "conclusion": "PARTIALLY SUPPORTS C3",
+  "note": "Cross-domain isolated memories are curiosity gaps — they exist in the mesh but are not integrated with its topology. Pre-existing [from X] gaps in the BEFORE state confirm prior cross-pollination effect."
+}

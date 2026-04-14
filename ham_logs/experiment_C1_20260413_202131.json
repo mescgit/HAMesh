@@ -1,0 +1,247 @@
+{
+  "claim": "C1",
+  "hypothesis": "Same mesh produces same attractor clusters across independent runs",
+  "dream_cycles_per_run": 500,
+  "n_runs": 3,
+  "meshes": {
+    "science": {
+      "runs": [
+        {
+          "run": 1,
+          "top_5_attractors": [
+            [
+              "computer architecture",
+              500
+            ],
+            [
+              "number theory",
+              500
+            ],
+            [
+              "graph theory",
+              500
+            ],
+            [
+              "Key exchange protocols",
+              420
+            ],
+            [
+              "Hashing algorithms",
+              263
+            ]
+          ],
+          "n_loops": 9,
+          "coherence_score": 0.7,
+          "elapsed_s": 1.0
+        },
+        {
+          "run": 2,
+          "top_5_attractors": [
+            [
+              "computer architecture",
+              500
+            ],
+            [
+              "number theory",
+              500
+            ],
+            [
+              "graph theory",
+              500
+            ],
+            [
+              "Key exchange protocols",
+              427
+            ],
+            [
+              "Hashing algorithms",
+              263
+            ]
+          ],
+          "n_loops": 8,
+          "coherence_score": 0.8,
+          "elapsed_s": 0.9
+        },
+        {
+          "run": 3,
+          "top_5_attractors": [
+            [
+              "computer architecture",
+              500
+            ],
+            [
+              "number theory",
+              500
+            ],
+            [
+              "graph theory",
+              500
+            ],
+            [
+              "Key exchange protocols",
+              426
+            ],
+            [
+              "Hashing algorithms",
+              267
+            ]
+          ],
+          "n_loops": 11,
+          "coherence_score": 0.7,
+          "elapsed_s": 0.9
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "run_pair": [
+            1,
+            2
+          ],
+          "overlap": 1.0
+        },
+        {
+          "run_pair": [
+            1,
+            3
+          ],
+          "overlap": 1.0
+        },
+        {
+          "run_pair": [
+            2,
+            3
+          ],
+          "overlap": 1.0
+        }
+      ],
+      "coherence_scores": [
+        0.7,
+        0.8,
+        0.7
+      ],
+      "avg_pairwise_overlap": 1.0,
+      "avg_coherence": 0.733,
+      "verdict": "SUPPORTS C1"
+    },
+    "philosophy": {
+      "runs": [
+        {
+          "run": 1,
+          "top_5_attractors": [
+            [
+              "The nature of thought and cognition",
+              500
+            ],
+            [
+              "philosophy of mind",
+              500
+            ],
+            [
+              "The role of perception and experience",
+              500
+            ],
+            [
+              "utilitarianism",
+              500
+            ],
+            [
+              "medieval Europe",
+              491
+            ]
+          ],
+          "n_loops": 3,
+          "coherence_score": 0.7,
+          "elapsed_s": 0.9
+        },
+        {
+          "run": 2,
+          "top_5_attractors": [
+            [
+              "The nature of thought and cognition",
+              500
+            ],
+            [
+              "philosophy of mind",
+              500
+            ],
+            [
+              "The role of perception and experience",
+              500
+            ],
+            [
+              "utilitarianism",
+              500
+            ],
+            [
+              "medieval Europe",
+              496
+            ]
+          ],
+          "n_loops": 3,
+          "coherence_score": 0.7,
+          "elapsed_s": 0.9
+        },
+        {
+          "run": 3,
+          "top_5_attractors": [
+            [
+              "The nature of thought and cognition",
+              500
+            ],
+            [
+              "philosophy of mind",
+              500
+            ],
+            [
+              "The role of perception and experience",
+              500
+            ],
+            [
+              "utilitarianism",
+              500
+            ],
+            [
+              "medieval Europe",
+              492
+            ]
+          ],
+          "n_loops": 3,
+          "coherence_score": 0.6,
+          "elapsed_s": 0.9
+        }
+      ],
+      "pairwise_overlap": [
+        {
+          "run_pair": [
+            1,
+            2
+          ],
+          "overlap": 1.0
+        },
+        {
+          "run_pair": [
+            1,
+            3
+          ],
+          "overlap": 1.0
+        },
+        {
+          "run_pair": [
+            2,
+            3
+          ],
+          "overlap": 1.0
+        }
+      ],
+      "coherence_scores": [
+        0.7,
+        0.7,
+        0.6
+      ],
+      "avg_pairwise_overlap": 1.0,
+      "avg_coherence": 0.667,
+      "verdict": "SUPPORTS C1"
+    }
+  },
+  "conclusion": "SUPPORTS C1"
+}
