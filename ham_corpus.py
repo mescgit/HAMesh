@@ -231,14 +231,16 @@ def download_metamath(dest_dir: str = "./ham_data") -> Path:
     return mm_path
 
 
-def parse_metamath(mm_path: str, max_theorems: int = 2000) -> list[dict]:
+def parse_metamath(mm_path: str, max_theorems: int = 200, skip: int = 0) -> list[dict]:
     """
     Parse a Metamath .mm file and extract theorem statements.
 
-    Returns a list of dicts:
-        {name, statement, hypotheses, domain}
+    Extracts the human-readable $(comment$) that precedes each theorem —
+    these are natural language descriptions that embed well. Falls back to
+    the symbolic statement if no comment is present.
 
-    Only extracts $p (provable) statements. Strips $( $) comments.
+    Returns a list of dicts: {name, statement, proof_sketch, domain}
+    Only extracts $p (provable) statements.
     """
     path = Path(mm_path)
     if not path.exists():
@@ -249,32 +251,108 @@ def parse_metamath(mm_path: str, max_theorems: int = 2000) -> list[dict]:
         )
 
     print(f"  Parsing {path.name} ({path.stat().st_size // 1024 // 1024} MB)...")
-    text = path.read_text(encoding="utf-8", errors="replace")
+    raw = path.read_text(encoding="utf-8", errors="replace")
 
-    # Strip comments $( ... $)
-    text = re.sub(r'\$\(.*?\$\)', ' ', text, flags=re.DOTALL)
-
-    theorems = []
-    # Match: label $p ... $= ... $.
-    pattern = re.compile(
-        r'(\w+)\s+\$p\s+(.*?)\s+\$=\s+(.*?)\s+\$\.',
+    # Extract comments paired with their following theorem label
+    # Pattern: $( description text $) ... label $p symbolic $= proof $.
+    block_pattern = re.compile(
+        r'\$\((.*?)\$\)'          # comment block
+        r'(?:[^$]*?)'             # anything between (whitespace, non-$ chars)
+        r'(\w+)\s+\$p\s+(.*?)\s+\$=\s+.*?\$\.',
         re.DOTALL
     )
-    for match in pattern.finditer(text):
-        name = match.group(1)
-        statement = ' '.join(match.group(2).split())
-        proof_refs = match.group(3).split()[:10]  # first 10 proof steps as context
+
+    theorems = []
+    seen = set()
+
+    for match in block_pattern.finditer(raw):
+        comment   = ' '.join(match.group(1).split()).strip()
+        name      = match.group(2)
+        symbolic  = ' '.join(match.group(3).split())
+
+        if name in seen:
+            continue
+        seen.add(name)
+
+        # Apply skip offset
+        if len(seen) <= skip:
+            continue
+
+        # Use the comment if it's meaningful natural language (>20 chars,
+        # doesn't start with '~' which means it's a cross-reference tag)
+        if len(comment) > 20 and not comment.startswith('~'):
+            # Clean up Metamath markup: remove ~ refs, `backtick` code, HTML
+            desc = re.sub(r'~\s*\w+', '', comment)
+            desc = re.sub(r'`[^`]*`', '', desc)
+            desc = re.sub(r'<[^>]+>', '', desc)
+            desc = re.sub(r'\s+', ' ', desc).strip()
+            statement = f"{name}: {desc[:300]}"
+        else:
+            # Fall back: use label + symbolic (still better than raw symbols)
+            statement = f"{name}: {symbolic[:200]}"
+
+        # Infer domain from common Metamath chapter prefixes
+        domain = _infer_domain(name, comment)
+
         theorems.append({
-            'name': name,
-            'statement': statement,
-            'proof_sketch': ' '.join(proof_refs),
-            'domain': 'metamath',
+            'name':         name,
+            'statement':    statement,
+            'proof_sketch': f"metamath: {symbolic[:80]}",
+            'domain':       domain,
         })
         if len(theorems) >= max_theorems:
             break
 
-    print(f"  Parsed {len(theorems)} theorems.")
+    # Also sweep for theorems without preceding comments (plain $p blocks)
+    if len(theorems) < max_theorems:
+        plain_pattern = re.compile(
+            r'(\w+)\s+\$p\s+(.*?)\s+\$=\s+.*?\$\.', re.DOTALL
+        )
+        for match in plain_pattern.finditer(raw):
+            if len(theorems) >= max_theorems:
+                break
+            name = match.group(1)
+            if name in seen:
+                continue
+            seen.add(name)
+            symbolic  = ' '.join(match.group(2).split())
+            statement = f"{name}: {symbolic[:200]}"
+            theorems.append({
+                'name':         name,
+                'statement':    statement,
+                'proof_sketch': f"metamath: {symbolic[:80]}",
+                'domain':       _infer_domain(name, ''),
+            })
+
+    print(f"  Parsed {len(theorems)} theorems "
+          f"({sum(1 for t in theorems if not t['statement'].endswith(t['name']+':'))} with natural language descriptions).")
     return theorems
+
+
+def _infer_domain(name: str, comment: str) -> str:
+    """Guess a math domain from the theorem name and comment text."""
+    text = (name + ' ' + comment).lower()
+    if any(w in text for w in ['prime', 'divis', 'factor', 'modulo', 'congruent', 'arith']):
+        return 'number theory'
+    if any(w in text for w in ['continu', 'limit', 'deriv', 'integr', 'differenti']):
+        return 'analysis'
+    if any(w in text for w in ['set', 'class', 'member', 'subset', 'union', 'intersect']):
+        return 'set theory'
+    if any(w in text for w in ['group', 'ring', 'field', 'homomorph', 'isomorph', 'algebra']):
+        return 'algebra'
+    if any(w in text for w in ['topolog', 'open', 'closed', 'compact', 'connect', 'metric']):
+        return 'topology'
+    if any(w in text for w in ['logic', 'provab', 'tautolog', 'wff', 'axiom', 'theorem']):
+        return 'logic'
+    if any(w in text for w in ['real', 'complex', 'rational', 'integer', 'natural']):
+        return 'number systems'
+    if any(w in text for w in ['matrix', 'vector', 'linear', 'eigenval', 'determin']):
+        return 'linear algebra'
+    if any(w in text for w in ['geometr', 'angle', 'triangle', 'circle', 'polygon']):
+        return 'geometry'
+    if any(w in text for w in ['comput', 'halting', 'turing', 'algorithm', 'decid']):
+        return 'computability'
+    return 'metamath'
 
 
 # ---------------------------------------------------------------------------
@@ -360,8 +438,12 @@ def main():
     src.add_argument("--file",     metavar="PATH",
                      help="Path to a Metamath .mm file")
 
-    parser.add_argument("--max",     type=int, default=2000,
-                        help="Max theorems to load from .mm file (default 2000)")
+    parser.add_argument("--max",     type=int, default=200,
+                        help="Max theorems to load from .mm file (default 200)")
+    parser.add_argument("--skip",    type=int, default=0,
+                        help="Skip the first N theorems (set.mm starts with ~3000 "
+                             "propositional logic tautologies; --skip 3000 jumps to "
+                             "set theory and beyond)")
     parser.add_argument("--filter",  metavar="DOMAIN",
                         help="Only load entries whose domain contains this string")
     parser.add_argument("--save",    metavar="PATH", default="math_mesh.pt",
@@ -379,9 +461,9 @@ def main():
         ]
     elif args.download:
         mm_path = download_metamath()
-        entries = parse_metamath(str(mm_path), max_theorems=args.max)
+        entries = parse_metamath(str(mm_path), max_theorems=args.max, skip=args.skip)
     else:
-        entries = parse_metamath(args.file, max_theorems=args.max)
+        entries = parse_metamath(args.file, max_theorems=args.max, skip=args.skip)
 
     if args.filter:
         entries = [e for e in entries if args.filter.lower() in e.get('domain','').lower()

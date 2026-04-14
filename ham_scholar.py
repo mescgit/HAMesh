@@ -136,8 +136,33 @@ class MathScholar:
     No LLM. No generation. Pure holographic dynamics.
     """
 
-    def __init__(self, mesh: HolographicMesh, novelty_threshold=0.35):
+    # Hopfield capacity: ~0.14 * dim before interference noise dominates
+    CAPACITY_FACTOR = 0.14
+
+    def __init__(self, mesh: HolographicMesh, novelty_threshold=None):
         self.mesh = mesh
+        n = len(mesh.memories)
+        capacity = int(self.CAPACITY_FACTOR * mesh.dim)
+
+        # Auto-set threshold based on mesh density.
+        # Over-capacity meshes need a lower threshold because every output
+        # vector will be close to *something* in the crowded space.
+        if novelty_threshold is None:
+            ratio = n / max(capacity, 1)
+            if ratio <= 1.0:
+                novelty_threshold = 0.35   # within capacity: standard
+            elif ratio <= 3.0:
+                novelty_threshold = 0.25   # moderately over: relax
+            elif ratio <= 10.0:
+                novelty_threshold = 0.15   # heavily over: use percentile mode
+            else:
+                novelty_threshold = 0.08   # saturated: very relaxed
+
+        if n > capacity:
+            print(f"  [Scholar] Mesh has {n} memories, capacity ~{capacity} "
+                  f"({n/capacity:.1f}x over). Using adaptive threshold={novelty_threshold:.2f}.")
+            print(f"  [Scholar] Tip: use --max 200 when building the corpus for best results.")
+
         self.log  = ConjectureLog(novelty_threshold=novelty_threshold)
         self.cycle = 0
         self.stats_history = []
@@ -152,6 +177,8 @@ class MathScholar:
                                 min(n_probes, len(self.mesh.memories)))
 
         stored = torch.stack([e for e, _ in self.mesh.memories]).to(self.mesh.device)
+        # For over-capacity meshes also compute the mean max-sim as a baseline
+        # so the threshold is percentile-relative rather than absolute.
 
         for idx in indices:
             seed_vec, seed_text = self.mesh.memories[idx]
@@ -292,12 +319,12 @@ def main():
                         help="Path to mesh file built by ham_corpus.py")
     parser.add_argument("--cycles",  type=int, default=1000,
                         help="Dream cycles to run (default 1000)")
-    parser.add_argument("--novelty-threshold", type=float, default=0.35,
-                        help="Min novelty score to log a conjecture (default 0.35)")
-    parser.add_argument("--decay",   type=float, default=0.02,
-                        help="Decay factor per decay_every cycles (default 0.02)")
-    parser.add_argument("--fold-strength", type=float, default=0.05,
-                        help="Fold strength per dream cycle (default 0.05)")
+    parser.add_argument("--novelty-threshold", type=float, default=None,
+                        help="Min novelty score (auto-set based on mesh density if omitted)")
+    parser.add_argument("--decay",   type=float, default=0.005,
+                        help="Decay factor per decay_every cycles (default 0.005)")
+    parser.add_argument("--fold-strength", type=float, default=0.01,
+                        help="Fold strength per dream cycle (default 0.01)")
     parser.add_argument("--top",     type=int, default=10,
                         help="How many top conjectures to display")
     parser.add_argument("--log",     default="conjectures.json",
@@ -314,7 +341,7 @@ def main():
     mesh = HolographicMesh.load(args.mesh, device=DEVICE)
     print(f"  {mesh.stats()}")
 
-    scholar = MathScholar(mesh, novelty_threshold=args.novelty_threshold)
+    scholar = MathScholar(mesh, novelty_threshold=args.novelty_threshold)  # None = auto
     scholar.dream_and_discover(
         total_cycles=args.cycles,
         fold_strength=args.fold_strength,
