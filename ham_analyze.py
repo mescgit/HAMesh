@@ -277,8 +277,24 @@ def main():
         print("Run an experiment first: python ham_experiment.py --claim C1")
         sys.exit(1)
 
+    def report_c5_phase(data: dict):
+        print("\n  ╔══════════════════════════════════════════════════════╗")
+        print("  ║  C5-PHASE: Multi-Hop Phase Transition                ║")
+        print("  ╚══════════════════════════════════════════════════════╝")
+        print(f"  Hypothesis: {data['hypothesis']}")
+        print()
+        print(f"  {'Cycles':>8}  {'Energy':>8}  {'Diversity':>10}  {'State'}")
+        print(f"  {'-'*8}  {'-'*8}  {'-'*10}  {'-'*15}")
+        for stage, s in sorted(data["stages"].items(), key=lambda x: int(x[0])):
+            df = s["different_fraction"]
+            state = "✓ distributed" if df > 0.4 else "~ partial" if df > 0.1 else "✗ collapsed"
+            print(f"  {stage:>8}  {s['mesh_energy']:>8.1f}  {df:>10.0%}  {state}")
+        print()
+        print(f"  Collapse: {data.get('conclusion', '?')}")
+
     reporters = {"C1": report_c1, "C2": report_c2,
-                 "C3": report_c3, "C4": report_c4, "C5": report_c5}
+                 "C3": report_c3, "C4": report_c4, "C5": report_c5,
+                 "C5-PHASE": report_c5_phase, "C5_PHASE": report_c5_phase}
 
     print("=" * 58)
     print("  HAMesh Analyzer")

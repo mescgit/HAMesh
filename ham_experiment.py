@@ -513,6 +513,113 @@ def experiment_c4(mesh_spec: dict, n_gaps=8):
 # C5 — Multi-hop follows transitive chains
 # ---------------------------------------------------------------------------
 
+def experiment_c5_phase(mesh_spec: dict, n_queries=10):
+    """
+    C5 Phase Transition:
+    Test multi-hop at multiple stages of dreaming to find when
+    collapse occurs — 0, 100, 500, 1000 dream cycles.
+
+    This documents the phase transition from distributed memory
+    (multi-hop works) to attractor-collapsed memory (every hop
+    lands on the same dominant pattern).
+    """
+    print("\n" + "=" * 60)
+    print("  C5-PHASE: Multi-Hop Phase Transition")
+    print("  (fresh mesh → post-dreaming)")
+    print("=" * 60)
+
+    TEST_QUERIES = [
+        "What is the relationship between entropy and information?",
+        "How does evolutionary pressure create structure?",
+        "What is the foundation of number theory?",
+        "How does perception relate to reality?",
+        "What connects cryptography to mathematics?",
+        "How does memory shape identity?",
+        "What is the nature of consciousness?",
+        "How do systems self-organize?",
+        "What is the role of symmetry in physics?",
+        "How does language shape thought?",
+    ][:n_queries]
+
+    DREAM_STAGES = [0, 100, 500, 1000]
+
+    results = {
+        "claim": "C5-PHASE",
+        "hypothesis": "Multi-hop diversity degrades with dreaming — a phase transition",
+        "stages": {},
+        "conclusion": None,
+    }
+
+    # Test one mesh as representative
+    mesh_name = list(mesh_spec.keys())[0]
+    mesh_path = mesh_spec[mesh_name]
+
+    print(f"\n  Using [{mesh_name}] mesh")
+    print(f"  Testing at dream stages: {DREAM_STAGES}\n")
+
+    for stage in DREAM_STAGES:
+        ham = HolographicMesh.load(mesh_path)
+
+        if stage > 0:
+            print(f"  Dreaming {stage} cycles (decay=0.02)...", end=" ", flush=True)
+            ham.dream(cycles=stage, fold_strength=0.1, decay=0.02, decay_every=20)
+            print("done")
+        else:
+            print(f"  Fresh mesh (0 dream cycles)")
+
+        energy = ham.stats()['energy']
+        different_count = 0
+        hop_sims = []
+
+        for question in TEST_QUERIES:
+            q_emb = embed(question)
+            _, act_1 = ham.resonate(q_emb, hops=1, top_k=1)
+            _, act_2 = ham.resonate(q_emb, hops=2, top_k=1)
+
+            top1 = act_1[0][2][:40] if act_1 else ""
+            top2 = act_2[0][2][:40] if act_2 else ""
+            sim1 = act_1[0][0] if act_1 else 0
+            sim2 = act_2[0][0] if act_2 else 0
+
+            if top1 != top2:
+                different_count += 1
+            hop_sims.append((sim1, sim2))
+
+        diff_frac = different_count / max(len(TEST_QUERIES), 1)
+        avg_sim1 = sum(s for s, _ in hop_sims) / max(len(hop_sims), 1)
+        avg_sim2 = sum(s for _, s in hop_sims) / max(len(hop_sims), 1)
+
+        results["stages"][stage] = {
+            "dream_cycles":       stage,
+            "mesh_energy":        round(energy, 1),
+            "different_fraction": round(diff_frac, 3),
+            "avg_1hop_sim":       round(avg_sim1, 4),
+            "avg_2hop_sim":       round(avg_sim2, 4),
+        }
+
+        status = "✓ distributed" if diff_frac > 0.4 else "~ partial" if diff_frac > 0.1 else "✗ collapsed"
+        print(f"    cycles={stage:4d}  energy={energy:6.1f}  "
+              f"multi-hop diversity={diff_frac:.0%}  {status}")
+
+    # Find the collapse point
+    stages = sorted(results["stages"].keys())
+    collapse_at = None
+    for i in range(len(stages) - 1):
+        if (results["stages"][stages[i]]["different_fraction"] > 0.1 and
+                results["stages"][stages[i+1]]["different_fraction"] <= 0.1):
+            collapse_at = stages[i+1]
+            break
+
+    results["collapse_at_cycles"] = collapse_at
+    results["conclusion"] = (
+        f"Phase transition occurs around {collapse_at} dream cycles"
+        if collapse_at else "No clear phase transition observed"
+    )
+    print(f"\n  {results['conclusion']}")
+
+    return save_results("C5_PHASE", results), results
+
+
 def experiment_c5(mesh_spec: dict, n_queries=20):
     """
     Claim: 2-hop diffraction activates meaningfully different (more
@@ -632,7 +739,8 @@ def parse_mesh_spec(spec_str: str) -> dict:
 
 def main():
     parser = argparse.ArgumentParser(description="HAMesh experiment runner")
-    parser.add_argument("--claim", type=str, choices=["C1","C2","C3","C4","C5","all"],
+    parser.add_argument("--claim", type=str,
+                        choices=["C1","C2","C3","C4","C5","C5_PHASE","all"],
                         default="all")
     parser.add_argument("--meshes", type=str, default=None)
     parser.add_argument("--cycles", type=int, default=500,
@@ -652,7 +760,7 @@ def main():
     print("=" * 60)
 
     claims_to_run = (
-        ["C1","C2","C3","C4","C5"] if args.claim == "all"
+        ["C1","C2","C3","C4","C5","C5_PHASE"] if args.claim == "all"
         else [args.claim]
     )
 
@@ -669,6 +777,8 @@ def main():
                 _, r = experiment_c4(mesh_spec, n_gaps=args.gaps)
             elif claim == "C5":
                 _, r = experiment_c5(mesh_spec)
+            elif claim == "C5_PHASE":
+                _, r = experiment_c5_phase(mesh_spec, n_queries=10)
             all_results[claim] = r.get("conclusion", "ERROR")
         except Exception as e:
             print(f"\n  ERROR in {claim}: {e}")

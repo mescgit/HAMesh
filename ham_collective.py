@@ -173,16 +173,18 @@ class MeshCollective:
     # Collective dreaming
     # ------------------------------------------------------------------
 
-    def collective_dream(self, cycles=50, fold_strength=0.1):
+    def collective_dream(self, cycles=50, fold_strength=0.1, decay=0.02):
         """
         All meshes dream simultaneously, then cross-pollinate.
         Dominant patterns from each domain bleed into the others.
+        decay: per-20-cycle decay factor (0.02 = 2% reduction every 20 cycles)
         """
         results = {}
         for name, ham in self.meshes.items():
             print(f"\n  [{name}] dreaming ({cycles} cycles)...")
             log, attractors, loops = ham.dream(
-                cycles=cycles, fold_strength=fold_strength
+                cycles=cycles, fold_strength=fold_strength,
+                decay=decay, decay_every=20
             )
             results[name] = {'attractors': attractors[:5], 'loops': loops[:3]}
 
@@ -517,19 +519,34 @@ def main():
             n = collective.cross_pollinate()
             print(f"  {n} attractor patterns shared.")
 
+        # --- normalize ---
+        elif cmd == 'normalize':
+            for name, ham in meshes.items():
+                before = torch.norm(ham.mesh).item()
+                ham.normalize_mesh()
+                after = torch.norm(ham.mesh).item()
+                print(f"    [{name}] energy {before:.1f} → {after:.1f}")
+            print("    Mesh energy anchored. Multi-hop diversity restored.")
+
         # --- dream ---
         elif cmd.startswith('dream'):
             parts = raw.split()
             cycles = 50
+            decay  = 0.02   # gentle decay by default during interactive dreams
             if len(parts) > 1:
                 try:
                     cycles = int(parts[1])
                 except ValueError:
                     pass
+            if len(parts) > 2:
+                try:
+                    decay = float(parts[2])
+                except ValueError:
+                    pass
 
             energy_before = {n: h.stats()['energy'] for n, h in meshes.items()}
             folds_before  = {n: h.n_folds           for n, h in meshes.items()}
-            results = collective.collective_dream(cycles=cycles)
+            results = collective.collective_dream(cycles=cycles, fold_strength=0.1)
 
             for name, data in results.items():
                 col = mesh_color(name, mesh_names)

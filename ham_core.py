@@ -33,6 +33,10 @@ class HolographicMesh:
         # Stored embeddings + text for decoding HAM outputs back to language
         self.memories = []  # list of (embedding_tensor, text_string)
 
+        # Target energy ceiling — normalize_mesh() rescales to this value.
+        # Keeps dominant attractors from drowning out everything else.
+        self.target_energy = None  # set automatically on first normalize call
+
     def _prepare(self, vec):
         """L2-normalize to the unit sphere — preserves semantic structure."""
         v = vec.float().to(self.device)
@@ -207,10 +211,56 @@ class HolographicMesh:
                  self.memories[idx[i]][0]) for i in range(k)]
 
     # ------------------------------------------------------------------
+    # Energy management
+    # ------------------------------------------------------------------
+
+    def normalize_mesh(self, target_energy=None):
+        """
+        Rescale the mesh so its Frobenius norm equals target_energy.
+
+        Without this, repeated dreaming causes attractor collapse:
+        dominant eigenvectors accumulate energy until every diffraction
+        immediately falls into one of ~5 gravitational wells, killing
+        multi-hop diversity and making the mesh nearly useless.
+
+        Call this periodically (or pass decay_every to dream()) to keep
+        the mesh in a healthy distributed state.
+
+        If target_energy is None, uses self.target_energy (set on first
+        call to the energy at that moment — a good baseline).
+        """
+        current = torch.norm(self.mesh).item()
+        if current == 0:
+            return current
+
+        if target_energy is None:
+            if self.target_energy is None:
+                # First call: anchor to current energy as the ceiling
+                self.target_energy = current
+            target_energy = self.target_energy
+
+        self.mesh = self.mesh * (target_energy / current)
+        return current
+
+    def apply_decay(self, decay=0.98):
+        """
+        Soft exponential decay: mesh *= decay.
+
+        Older folds fade; recent ones remain strong.
+        Makes the mesh more plastic — new learning can shift attractors
+        instead of being swamped by the accumulated history.
+
+        decay=0.98 → halves energy every ~34 dream cycles
+        decay=0.99 → halves energy every ~69 dream cycles
+        """
+        self.mesh *= decay
+
+    # ------------------------------------------------------------------
     # Dreaming — recursive self-modification
     # ------------------------------------------------------------------
 
-    def dream(self, cycles=50, fold_strength=0.1, reseed_every=10):
+    def dream(self, cycles=50, fold_strength=0.1, reseed_every=10,
+              decay=0.0, decay_every=20):
         """
         The HAM queries itself, folds its own outputs back in,
         and develops self-perpetuating attractor loops.
@@ -224,6 +274,13 @@ class HolographicMesh:
         Over many cycles, certain patterns keep activating each
         other in loops.  These are the "strange attractors" —
         self-reinforcing behavioral basins the mesh falls into.
+
+        decay : float
+            Per-application decay factor (0 = no decay, 0.98 = gentle).
+            Applied every decay_every cycles to prevent attractor collapse.
+            Recommended: 0.98 for long runs, 0.0 for short exploratory runs.
+        decay_every : int
+            How often (in cycles) to apply decay.
 
         Returns
         -------
@@ -289,6 +346,10 @@ class HolographicMesh:
                 e1 = self.memories[activated[0][1]][0]
                 e2 = self.memories[activated[1][1]][0]
                 self.fold(e1, e2, strength=fold_strength * 0.5)
+
+            # --- Decay: prevent attractor collapse on long runs ---
+            if decay > 0 and cycle > 0 and cycle % decay_every == 0:
+                self.apply_decay(1.0 - decay)
 
             # --- Record ---
             log.append({
