@@ -1,0 +1,15 @@
+Holographic Associative Memory Principles
+
+A holographic associative memory stores information as interference patterns in a dense matrix. Unlike conventional databases that store items in discrete slots, a HAM superimposes all knowledge into the same physical space through outer-product folding. Every piece of knowledge coexists with every other piece, creating a rich web of implicit associations.
+
+Retrieval in a HAM is not search — it is diffraction. A query vector propagates through the mesh like light through a hologram. The answer doesn't exist in any single location; it emerges through constructive interference across all stored patterns simultaneously. Relevant patterns reinforce each other while irrelevant noise cancels out through destructive interference.
+
+The bipolar phase representation is fundamental to holographic memory. Continuous values are snapped to {-1, +1}, creating a crystalline lattice where interference patterns are maximally distinct. This is analogous to how physical holograms encode information in phase differences of light waves.
+
+Multi-hop reasoning chains multiple diffractions. A single hop retrieves direct associations: asking about A retrieves B. A second hop takes B's pattern and diffracts again, retrieving C — the HAM has followed a transitive chain A to B to C without explicit graph traversal. The reasoning emerges from the physics of the mesh itself.
+
+The capacity of a holographic memory scales with dimensionality. A mesh of dimension N can perfectly store up to N orthogonal associations. Beyond this limit, interference noise grows, but the mesh gracefully degrades rather than catastrophically failing. This is fundamentally different from hash tables or databases that have hard capacity limits.
+
+Self-teaching allows the HAM to grow beyond its initial knowledge. When the HAM successfully answers a question, the question-answer pair gets folded back into the mesh at reduced strength. Over time, these self-taught associations create emergent knowledge — connections the original training data never explicitly contained.
+
+The HAM operates in an LLM's native embedding space. The LLM serves as the sensory organ: its embeddings are the eyes that translate text into the vector space where the HAM thinks, and its decoder is the mouth that translates the HAM's synthesised patterns back into language. The HAM is the brain — the reasoning core that creates associations, follows chains of thought, and generates novel intuitions through interference.

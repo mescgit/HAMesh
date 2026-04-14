@@ -1,0 +1,38 @@
+# Saved mesh states (large binary files — regenerate with ham_distill.py)
+*.pt
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environments
+.env
+.venv
+env/
+venv/
+
+# IDE / OS
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# Claude Code session data
+.claude/
+
+# Local model files
+*.gguf
+*.bin
+*.safetensors
+
+# Logs
+*.log
