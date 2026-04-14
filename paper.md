@@ -1,6 +1,6 @@
 # HAMesh: Emergent Attractor Dynamics and Cross-Domain Synthesis in Holographic Associative Memory Operating in Large Language Model Embedding Space
 
-**[Author]**  
+**Jesse Wallace**  
 Independent Research  
 GitHub: https://github.com/mescgit/HAMesh
 
@@ -252,13 +252,13 @@ Code and experiment logs: https://github.com/mescgit/HAMesh
 
 [4] Ramsauer, H., et al. (2020). Hopfield Networks is All You Need. *arXiv:2008.02217*.
 
-[5] [Author TBD]. (2025). Hypertokens: Holographic Associative Memory in Tokenized LLMs. *arXiv:2507.00002*.
+[5] Augeri, C. J. (2025). Hypertokens: Holographic Associative Memory in Tokenized LLMs. *arXiv:2507.00002*.
 
 [6] Packer, C., et al. (2023). MemGPT: Towards LLMs as Operating Systems. *arXiv:2310.08560*.
 
-[7] [Author TBD]. (2025). Memori: A Persistent Memory Layer for Efficient, Context-Aware LLM Agents. *arXiv:2603.19935*.
+[7] Borro, L. C., Macarini, L. A. B., Tindall, G., Montero, M., & Struck, A. B. (2026). Memori: A Persistent Memory Layer for Efficient, Context-Aware LLM Agents. *arXiv:2603.19935*.
 
-[8] [Author TBD]. (2025). Daydreaming Hopfield Networks and their surprising effectiveness on correlated data. ResearchGate.
+[8] Serricchio, L., Bocchi, D., Chilin, C., Marino, R., Negri, M., Cammarota, C., & Ricci-Tersenghi, F. (2025). Daydreaming Hopfield Networks and their surprising effectiveness on correlated data. *Neural Networks*. arXiv:2405.08777.
 
 [9] Tononi, G., & Cirelli, C. (2014). Sleep and the price of plasticity: from synaptic and cellular homeostasis to memory consolidation and integration. *Neuron*, 81(1), 12–34.
 
