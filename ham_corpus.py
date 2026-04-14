@@ -185,6 +185,52 @@ BUILTIN_CORPUS = [
 # Metamath .mm file parser
 # ---------------------------------------------------------------------------
 
+METAMATH_URL = "https://us.metamath.org/downloads/metamath.zip"
+METAMATH_DEFAULT_PATH = Path("./ham_data/set.mm")
+
+
+def download_metamath(dest_dir: str = "./ham_data") -> Path:
+    """
+    Download and extract set.mm from metamath.org.
+    Returns the path to the extracted set.mm file.
+    """
+    import zipfile
+
+    dest = Path(dest_dir)
+    dest.mkdir(parents=True, exist_ok=True)
+    mm_path = dest / "set.mm"
+
+    if mm_path.exists():
+        print(f"  set.mm already exists at {mm_path} ({mm_path.stat().st_size // 1024 // 1024} MB)")
+        return mm_path
+
+    zip_path = dest / "metamath.zip"
+    print(f"  Downloading metamath.zip from metamath.org...")
+    print(f"  (This is ~30 MB, one-time download)")
+
+    def _progress(count, block_size, total):
+        pct = min(count * block_size * 100 // total, 100)
+        if count % 50 == 0:
+            print(f"  {pct}%", end="\r", flush=True)
+
+    urllib.request.urlretrieve(METAMATH_URL, zip_path, reporthook=_progress)
+    print(f"  Downloaded. Extracting set.mm...")
+
+    with zipfile.ZipFile(zip_path, "r") as zf:
+        # set.mm may be nested inside a folder in the zip
+        mm_names = [n for n in zf.namelist() if n.endswith("set.mm")]
+        if not mm_names:
+            raise RuntimeError("set.mm not found inside metamath.zip")
+        zf.extract(mm_names[0], dest)
+        extracted = dest / mm_names[0]
+        if extracted != mm_path:
+            extracted.rename(mm_path)
+
+    zip_path.unlink()  # clean up zip
+    print(f"  Extracted: {mm_path} ({mm_path.stat().st_size // 1024 // 1024} MB)")
+    return mm_path
+
+
 def parse_metamath(mm_path: str, max_theorems: int = 2000) -> list[dict]:
     """
     Parse a Metamath .mm file and extract theorem statements.
@@ -196,7 +242,11 @@ def parse_metamath(mm_path: str, max_theorems: int = 2000) -> list[dict]:
     """
     path = Path(mm_path)
     if not path.exists():
-        raise FileNotFoundError(f"Metamath file not found: {mm_path}")
+        raise FileNotFoundError(
+            f"Metamath file not found: {mm_path}\n"
+            f"  Run with --download to fetch it automatically, or download manually:\n"
+            f"  {METAMATH_URL}"
+        )
 
     print(f"  Parsing {path.name} ({path.stat().st_size // 1024 // 1024} MB)...")
     text = path.read_text(encoding="utf-8", errors="replace")
@@ -305,6 +355,8 @@ def main():
     src = parser.add_mutually_exclusive_group(required=True)
     src.add_argument("--builtin",  action="store_true",
                      help="Use the bundled mini-corpus (~120 theorems, no download needed)")
+    src.add_argument("--download", action="store_true",
+                     help="Auto-download set.mm from metamath.org (~30 MB, one-time)")
     src.add_argument("--file",     metavar="PATH",
                      help="Path to a Metamath .mm file")
 
@@ -325,6 +377,9 @@ def main():
             {'name': n, 'statement': s, 'proof_sketch': f"domain: {d}", 'domain': d}
             for n, s, d in BUILTIN_CORPUS
         ]
+    elif args.download:
+        mm_path = download_metamath()
+        entries = parse_metamath(str(mm_path), max_theorems=args.max)
     else:
         entries = parse_metamath(args.file, max_theorems=args.max)
 
